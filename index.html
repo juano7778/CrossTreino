@@ -255,7 +255,7 @@ b{font-weight:700}
     <div class="hero-foot">
       <div class="stat"><b class="display">3</b><span>Clases diarias</span></div>
       <div class="stat"><b class="display">6·7·8</b><span>PM</span></div>
-      <div class="stat"><b class="display">20</b><span>Cupos por clase</span></div>
+      <div class="stat"><b class="display">12</b><span>Cupos por clase</span></div>
     </div>
   </div>
 
@@ -311,7 +311,7 @@ b{font-weight:700}
   <main class="wrap">
     <div class="sec-head">
       <div><p class="eyebrow">Horarios 6 · 7 · 8 PM</p><h1 class="display">Elige tu clase</h1></div>
-      <p class="muted">Máximo <b id="cupo-txt">20</b> atletas por clase</p>
+      <p class="muted">Máximo <b id="cupo-txt">12</b> atletas por clase</p>
     </div>
 
     <div id="perfil-aviso"></div>
@@ -320,7 +320,7 @@ b{font-weight:700}
     <div id="wod"></div>
     <div class="grid" id="clases"></div>
 
-    <section class="mias-sec">
+    <section class="mias-sec" id="mias-sec">
       <h2 class="display">Mis reservas <span class="count" id="mias-count">0</span></h2>
       <div id="mias"></div>
     </section>
@@ -514,7 +514,8 @@ async function cargar(){
 
 /* ---------- Render ---------- */
 function renderApp(){
-  const { usuario, dias, cupo, minCancelar, minReservar = 180 } = state.agenda;
+  const { usuario, dias, cupo, minCancelar, minReservar = 180, puedeReservar = true } = state.agenda;
+  $('#mias-sec').classList.toggle('hidden', !puedeReservar);
   $('#hola-nombre').textContent = usuario.nombre.split(' ')[0];
   $('#avatar').textContent = (usuario.nombre.trim()[0] || '·').toUpperCase();
   const staff = usuario.rol === 'admin' || usuario.rol === 'coach';
@@ -522,7 +523,7 @@ function renderApp(){
   $('#rol-admin').classList.toggle('hidden', !staff);
   $('#btn-usuarios').classList.toggle('hidden', usuario.rol !== 'admin');
   $('#cupo-txt').textContent = cupo;
-  $('#perfil-aviso').innerHTML = usuario.perfil ? '' : `<div class="aviso">
+  $('#perfil-aviso').innerHTML = usuario.perfil || usuario.rol === 'coach' ? '' : `<div class="aviso">
     <span><b>Completa tu perfil</b> · género, estatura, año de nacimiento y peso, para que el coach planifique mejor.</span>
     <button type="button" class="btn sm primary" data-perfil="abrir">Completar</button></div>`;
 
@@ -548,8 +549,8 @@ function renderApp(){
   // Mantiene abiertas las listas de asistentes al refrescar (la agenda se recarga cada minuto)
   state.asisAbiertos = new Set([...$$('#clases details[open]')].map(x => x.dataset.asis));
   $('#clases').innerHTML = dia.soloWod
-    ? '<div class="vacio" style="grid-column:1/-1">Las reservas de este día aún no abren.<br>Como coach puedes dejar cargado el WOD desde ya.</div>'
-    : dia.clases.map(c => tarjeta(c, dia.fecha, cupo, minCancelar, minReservar)).join('');
+    ? `<div class="vacio" style="grid-column:1/-1">Las reservas de este día abren ${aperturaTxt(dia.fecha)}.<br>Como coach ya puedes dejar cargado el WOD; los atletas lo verán cuando abran las reservas.</div>`
+    : dia.clases.map(c => tarjeta(c, dia.fecha, cupo, minCancelar, minReservar, puedeReservar)).join('');
   renderMias();
 }
 
@@ -649,6 +650,12 @@ document.addEventListener('change', async ev => {
 });
 
 /* ---------- WOD ---------- */
+function aperturaTxt(f){
+  const a = state.agenda.horaApertura, h = a ? hora12(a) : null;
+  const hora = h ? ` a las ${h.t} ${h.ap}` : '';
+  return f === mananaISO() ? `hoy${hora}` : `el día anterior${hora}`;
+}
+
 function etiquetaDia(f){ return f === hoyISO() ? 'Hoy' : f === mananaISO() ? 'Mañana' : fechaLarga(f); }
 
 function renderWod(dia, staff){
@@ -698,7 +705,7 @@ async function accionWod(b){
   }
 }
 
-function tarjeta(c, fecha, cupo, minCancelar, minReservar){
+function tarjeta(c, fecha, cupo, minCancelar, minReservar, puedeReservar = true){
   const h = hora12(c.hora);
   const limite = durTxt(minReservar);
   const libres = Math.max(0, cupo - c.ocupados);
@@ -710,7 +717,7 @@ function tarjeta(c, fecha, cupo, minCancelar, minReservar){
   else if (c.estado === 'cerrada'){ chip = ['closed','Cerrada'];  cls = 'cerrada'; }
   else if (c.estado === 'limite') { chip = ['closed','Reservas cerradas']; cls = 'cerrada'; }
   else if (c.estado === 'llena')  { chip = ['full','Lleno']; }
-  else if (libres <= 5)           { chip = ['warn','Últimos cupos']; }
+  else if (libres <= Math.max(2, Math.round(cupo / 4))) { chip = ['warn','Últimos cupos']; }
   else                            { chip = ['ok','Disponible']; }
 
   if (c.mia){
@@ -724,6 +731,7 @@ function tarjeta(c, fecha, cupo, minCancelar, minReservar){
   else if (c.estado === 'llena')   btn = `<button type="button" class="btn" disabled>Sin cupos</button>`;
   else if (c.bloqueada)            btn = `<button type="button" class="btn" disabled>Ya tienes clase este día</button>`;
   else                             btn = `<button type="button" class="btn primary" data-act="reservar" ${data}>Reservar cupo</button>`;
+  if (!puedeReservar){ btn = ''; nota = ''; } // el coach dirige la clase: no reserva ni ocupa cupo
 
   const segs = Array.from({ length: cupo }, (_, i) => `<i class="${i < c.ocupados ? 'on' : ''}"></i>`).join('');
   const nivel = pct >= 1 ? 'lvl-full' : pct >= .75 ? 'lvl-warn' : '';
@@ -805,14 +813,14 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && st
 /* =========================================================
    MODO DEMO (solo cuando API_URL está vacío) — simula el backend
    ========================================================= */
-const D = { horas:['18:00','19:00','20:00'], cupo:20, adelante:7, activos:[1,2,3,4,5,6], unaPorDia:true, minCancelar:120, minReservar:120 };
+const D = { horas:['18:00','19:00','20:00'], cupo:12, adelante:2, diasWod:5, activos:[1,2,3,4,5,6], unaPorDia:true, minCancelar:120, minReservar:120 };
 const demoDB = { usuarios:[{ email:'demo@crosstreino.com', nombre:'Atleta Demo', password:'123456', rol:'admin' }], sesiones:{}, reservas:[], sembrado:false,
   wods:{ [iso(new Date())]: { texto:'WARM UP\n3 rondas: 10 air squats, 10 push ups, 200 m run\n\nWOD · AMRAP 15\'\n12 wall balls (9/6 kg)\n9 kettlebell swings (24/16 kg)\n6 burpees over the bar', autor:'Coach Demo' } } };
 const NOMBRES = ['Andrea Vélez','Carlos Ortiz','Mateo Crespo','Valentina Ochoa','Diego Malo','Sofía Cordero','Daniel Vázquez','Camila Astudillo','José Andrade','Gabriela Muñoz','Luis Peña','Paula Moscoso','Andrés Torres','María Sarmiento','Pablo Jaramillo','Fernanda León','Jorge Calle','Isabel Neira','Santiago Vintimilla','Lucía Serrano'];
 
-function demoFechas(){
+function demoFechas(dias = D.adelante){
   const out = [], n = new Date();
-  for (let i = 0; i < D.adelante; i++){
+  for (let i = 0; i < dias; i++){
     const d = new Date(n.getFullYear(), n.getMonth(), n.getDate() + i);
     if (D.activos.includes(d.getDay())) out.push(iso(d));
   }
@@ -822,7 +830,7 @@ function demoSembrar(){
   if (demoDB.sembrado) return; demoDB.sembrado = true;
   demoFechas().forEach((f, i) => D.horas.forEach((h, j) => {
     let n = Math.round(19 - i * 3.3 - j * 2 + (Math.random() * 6 - 3));
-    if (i === 1 && j === 0) n = 20;
+    if (i === 1 && j === 0) n = D.cupo;
     n = Math.max(0, Math.min(D.cupo, n));
     for (let k = 0; k < n; k++) demoDB.reservas.push({ fecha:f, hora:h, email:`x${k}@x`, nombre:NOMBRES[(k + i + j) % 20] });
   }));
@@ -837,7 +845,7 @@ async function demoApi(b){
   const inicio = (f, h) => { const o = fechaObj(f); o.setHours(+h.slice(0,2), +h.slice(3)); return o.getTime(); };
   const agenda = () => {
     const u = sesion(), now = Date.now();
-    return { usuario:pub(u), cupo:D.cupo, minCancelar:D.minCancelar, minReservar:D.minReservar, dias: demoFechas().map(f => {
+    return { usuario:pub(u), puedeReservar: u.rol !== 'coach', cupo:D.cupo, minCancelar:D.minCancelar, minReservar:D.minReservar, dias: demoFechas().map(f => {
       const del = demoDB.reservas.filter(r => r.fecha === f), tengo = del.some(r => r.email === u.email);
       return { fecha:f, wod: demoDB.wods[f] || null, clases: D.horas.map(h => {
         const l = del.filter(r => r.hora === h), mia = l.some(r => r.email === u.email), ini = inicio(f, h);
@@ -854,7 +862,9 @@ async function demoApi(b){
         });
         return c;
       })};
-    })};
+    }).concat(u.rol === 'admin' || u.rol === 'coach'
+      ? demoFechas(D.diasWod).filter(f => !demoFechas().includes(f)).map(f => ({ fecha:f, wod: demoDB.wods[f] || null, clases:[], soloWod:true }))
+      : []), horaApertura:'12:00' };
   };
   switch (b.accion){
     case 'login': {
@@ -909,6 +919,7 @@ async function demoApi(b){
     case 'agenda': return agenda();
     case 'reservar': {
       const u = sesion(), del = demoDB.reservas.filter(r => r.fecha === b.fecha);
+      if (u.rol === 'coach') err('Como coach no necesitas reservar cupo.');
       if (inicio(b.fecha, b.hora) <= Date.now()) err('Esa clase ya empezó.');
       if (inicio(b.fecha, b.hora) - Date.now() < D.minReservar * 6e4) err(`Las reservas se cierran ${durTxt(D.minReservar)} antes de la clase.`);
       if (D.unaPorDia && del.some(r => r.email === u.email)) err('Solo puedes reservar una clase por día.');
