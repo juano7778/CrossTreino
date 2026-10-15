@@ -162,6 +162,9 @@ b{font-weight:700}
 
 .aviso{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--accent-dim);border:1px solid rgba(200,255,46,.35);border-radius:16px;padding:14px 16px;margin:-6px 0 18px;font-size:14px}
 .aviso b{color:var(--accent)}
+.perfil-mini{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:-8px 0 16px;font-size:13.5px;color:var(--muted)}
+.perfil-mini b{color:var(--text);font-weight:600}
+.link-btn{color:var(--accent);font-weight:700;font-size:13px;text-decoration:underline;text-underline-offset:3px;padding:2px 0}
 .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .seg label{margin:0}
 .seg input{position:absolute;opacity:0;pointer-events:none}
@@ -189,6 +192,9 @@ b{font-weight:700}
 .urow select{flex:none;background:var(--surface-2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:9px 10px;font:inherit;font-size:14px;cursor:pointer}
 .urow select:focus{outline:none;border-color:var(--accent)}
 .urow select:disabled{opacity:.6;cursor:default}
+.urow-del{flex:none;width:36px;height:36px}
+.urow-del:hover{color:var(--danger);border-color:rgba(255,87,87,.5);background:rgba(255,87,87,.08)}
+.urow-del-ph{flex:none;width:36px}
 
 .mias-sec{margin:52px 0 30px}
 .mias-sec h2{font-size:40px;text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:16px}
@@ -213,6 +219,7 @@ b{font-weight:700}
 .toast.ok{border-color:rgba(200,255,46,.5)}
 .toast.err{border-color:rgba(255,87,87,.55);color:#ffb3b3}
 .modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);display:grid;place-items:center;padding:20px}
+#modal{z-index:55} /* la confirmación se muestra encima del panel de usuarios */
 .modal-box{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px;animation:pop .2s ease-out}
 @keyframes pop{from{transform:scale(.95);opacity:0}}
 .modal-box h3{font-size:34px;text-transform:uppercase;line-height:1}
@@ -435,9 +442,9 @@ function toast(msg, tipo = 'ok'){
   const t = $('#toast'); t.textContent = msg; t.className = 'toast show ' + tipo;
   clearTimeout(toastT); toastT = setTimeout(() => t.className = 'toast ' + tipo, 3400);
 }
-function confirmar(titulo, texto){
+function confirmar(titulo, texto, si = 'Sí, cancelar'){
   return new Promise(res => {
-    $('#modal-titulo').textContent = titulo; $('#modal-texto').textContent = texto;
+    $('#modal-titulo').textContent = titulo; $('#modal-texto').textContent = texto; $('#modal-si').textContent = si;
     $('#modal').classList.remove('hidden');
     const fin = v => { $('#modal').classList.add('hidden'); $('#modal-si').onclick = $('#modal-no').onclick = null; res(v); };
     $('#modal-si').onclick = () => fin(true);
@@ -523,9 +530,7 @@ function renderApp(){
   $('#rol-admin').classList.toggle('hidden', !staff);
   $('#btn-usuarios').classList.toggle('hidden', usuario.rol !== 'admin');
   $('#cupo-txt').textContent = cupo;
-  $('#perfil-aviso').innerHTML = usuario.perfil || usuario.rol === 'coach' ? '' : `<div class="aviso">
-    <span><b>Completa tu perfil</b> · género, estatura, año de nacimiento y peso, para que el coach planifique mejor.</span>
-    <button type="button" class="btn sm primary" data-perfil="abrir">Completar</button></div>`;
+  $('#perfil-aviso').innerHTML = usuario.rol === 'coach' ? '' : avisoPerfil(usuario.perfil);
 
   if (!dias.length){
     $('#dias').innerHTML = ''; $('#fecha-larga').textContent = ''; $('#wod').innerHTML = '';
@@ -572,6 +577,19 @@ function resumenAsistentes(lista){
   const sin = lista.length - con.length;
   if (sin) partes.push(`${sin} sin perfil`);
   return `<p class="asis-res">${partes.join(' · ')}</p>`;
+}
+
+// Sin perfil: invita a completarlo. Con perfil: lo resume con botón Editar y, si pasó un mes, pide actualizar el peso
+function avisoPerfil(p){
+  if (!p) return `<div class="aviso">
+    <span><b>Completa tu perfil</b> · género, estatura, año de nacimiento y peso, para que el coach planifique mejor.</span>
+    <button type="button" class="btn sm primary" data-perfil="abrir">Completar</button></div>`;
+  const dias = p.actualizado ? Math.floor((Date.now() - fechaObj(p.actualizado).getTime()) / 864e5) : 999;
+  if (dias >= 30) return `<div class="aviso">
+    <span><b>¿Cambió tu peso?</b> · tu perfil no se actualiza hace más de un mes (${esc(datosAtleta(p))}).</span>
+    <button type="button" class="btn sm primary" data-perfil="abrir">Actualizar</button></div>`;
+  return `<div class="perfil-mini"><span>Tu perfil: <b>${esc(datosAtleta(p))}</b></span>
+    <button type="button" class="link-btn" data-perfil="abrir">Editar</button></div>`;
 }
 
 function abrirPerfil(){
@@ -625,11 +643,31 @@ function renderUsuarios(){
     return `<div class="urow">
       <div class="urow-info"><b>${esc(u.nombre)}${soyYo ? ' (tú)' : ''}</b><span>${esc(u.email)}</span><span>${u.perfil ? esc(datosAtleta(u.perfil)) : 'sin perfil'}</span></div>
       <select data-rol-email="${esc(u.email)}" aria-label="Rol de ${esc(u.nombre)}" ${soyYo ? 'disabled title="No puedes cambiar tu propio rol"' : ''}>${opts}</select>
+      ${soyYo ? '<span class="urow-del-ph"></span>' : `<button type="button" class="icon-btn urow-del" data-eliminar="${esc(u.email)}" title="Eliminar a ${esc(u.nombre)}" aria-label="Eliminar a ${esc(u.nombre)}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>`}
     </div>`;
   }).join('') : '<div class="vacio">Nadie coincide con la búsqueda.</div>';
 }
 
 $('#admin-buscar').addEventListener('input', renderUsuarios);
+
+async function eliminarUsuario(b){
+  const email = b.dataset.eliminar, u = state.usuarios.find(x => x.email === email);
+  const ok = await confirmar(`¿Eliminar a ${u.nombre}?`,
+    'Se borrará su cuenta y se liberarán sus reservas de hoy y mañana. Su historial de clases pasadas se conserva. No se puede deshacer.', 'Sí, eliminar');
+  if (!ok) return;
+  b.classList.add('loading'); b.disabled = true;
+  try {
+    state.usuarios = await api('eliminarUsuario', { email });
+    renderUsuarios();
+    toast(`${u.nombre} fue eliminado/a.`, 'info');
+    cargar(); // los cupos liberados se ven al instante
+  } catch(e){
+    b.classList.remove('loading'); b.disabled = false;
+    if (e.message === 'SESION') cerrarAdmin();
+    manejarError(e);
+  }
+}
 
 document.addEventListener('change', async ev => {
   const s = ev.target.closest('select[data-rol-email]');
@@ -774,6 +812,9 @@ document.addEventListener('click', async ev => {
   const w = ev.target.closest('[data-wod]');
   if (w){ if (!w.disabled) accionWod(w); return; }
 
+  const del = ev.target.closest('[data-eliminar]');
+  if (del){ if (!del.disabled) eliminarUsuario(del); return; }
+
   const ad = ev.target.closest('[data-admin]');
   if (ad){ ad.dataset.admin === 'abrir' ? abrirAdmin() : cerrarAdmin(); return; }
 
@@ -899,6 +940,17 @@ async function demoApi(b){
       x.rol = b.rol;
       return demoApi({ ...b, accion:'usuarios' });
     }
+    case 'eliminarUsuario': {
+      const yo = sesion();
+      if (yo.rol !== 'admin') err('Solo el admin puede eliminar usuarios.');
+      if (b.email === yo.email) err('No puedes eliminar tu propia cuenta.');
+      const i = demoDB.usuarios.findIndex(u => u.email === b.email);
+      if (i < 0) err('No encontramos ese usuario.');
+      demoDB.usuarios.splice(i, 1);
+      demoDB.reservas = demoDB.reservas.filter(r => !(r.email === b.email && r.fecha >= hoyISO()));
+      Object.keys(demoDB.sesiones).forEach(t => { if (demoDB.sesiones[t] === b.email) delete demoDB.sesiones[t]; });
+      return demoApi({ ...b, accion:'usuarios' });
+    }
     case 'guardarPerfil': {
       const u = sesion();
       if (!['M','F','Otro'].includes(b.genero)) err('Elige tu género.');
@@ -906,7 +958,7 @@ async function demoApi(b){
       if (!(est >= 100 && est <= 250)) err('La estatura debe estar entre 100 y 250 cm.');
       if (!(nac >= anio - 100 && nac <= anio - 10)) err(`El año de nacimiento debe estar entre ${anio - 100} y ${anio - 10}.`);
       if (!(pe >= 30 && pe <= 250)) err('El peso debe estar entre 30 y 250 kg.');
-      u.perfil = { genero:b.genero, estatura:est, nacimiento:nac, edad:anio - nac, peso:Math.round(pe * 10) / 10 };
+      u.perfil = { genero:b.genero, estatura:est, nacimiento:nac, edad:anio - nac, peso:Math.round(pe * 10) / 10, actualizado: iso(new Date()) };
       return agenda();
     }
     case 'guardarWod': {
