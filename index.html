@@ -32,6 +32,7 @@ b{font-weight:700}
 .logo b{color:var(--accent);font-weight:400}
 .mark{width:34px;height:34px;flex:none;background:var(--accent);color:var(--ink);display:grid;place-items:center;border-radius:9px;transform:skewX(-10deg);font-size:19px;letter-spacing:.02em}
 .mark span{transform:skewX(10deg);padding-top:2px}
+.logo-img{display:block;height:40px;width:auto;background:#fff;padding:5px 9px;border-radius:10px}
 
 /* ---------- Demo ---------- */
 .demo{background:repeating-linear-gradient(-45deg,#1b1d0b 0 12px,#151609 12px 24px);color:#e6ff9a;font-size:13px;text-align:center;padding:9px 16px;border-bottom:1px solid #33370f;line-height:1.5}
@@ -149,6 +150,46 @@ b{font-weight:700}
 .asis li{padding:2px 0;break-inside:avoid}
 .asis p{margin-top:8px;color:var(--muted)}
 
+.wod-card{background:linear-gradient(160deg,rgba(200,255,46,.06),transparent 45%),var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:var(--radius);padding:20px 22px;margin-bottom:18px;display:flex;flex-direction:column;gap:12px}
+.wod-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.wod-head .eyebrow{margin-bottom:4px}
+.wod-head h2{font-size:38px;line-height:.95;text-transform:uppercase}
+.wod-txt{white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;line-height:1.6}
+.wod-autor{font-size:12px;color:var(--muted)}
+.wod-input{width:100%;min-height:220px;resize:vertical;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font:inherit;font-size:15px;line-height:1.5;outline:none}
+.wod-input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-dim)}
+.wod-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.aviso{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--accent-dim);border:1px solid rgba(200,255,46,.35);border-radius:16px;padding:14px 16px;margin:-6px 0 18px;font-size:14px}
+.aviso b{color:var(--accent)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg label{margin:0}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg span{display:block;text-align:center;padding:12px 0;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--muted);font-weight:700;cursor:pointer;transition:.15s;text-transform:none;letter-spacing:0;font-size:15px}
+.seg input:checked + span{background:var(--accent);border-color:var(--accent);color:var(--ink)}
+.seg input:focus-visible + span{box-shadow:0 0 0 4px var(--accent-dim)}
+.perfil-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.perfil-grid .field input{padding:12px 12px}
+.perfil-grid .field label{white-space:nowrap}
+.perfil-grid .field label small{text-transform:none;letter-spacing:0;opacity:.75}
+#form-perfil .auth-error{margin:0 0 12px}
+#form-perfil .pf-nota{font-size:12.5px;line-height:1.5;margin:-4px 0 12px}
+.asis-res{color:var(--muted);font-size:12.5px;margin-top:8px}
+.asis ol.det{columns:1}
+.asis ol.det small{color:var(--muted);font-size:12.5px;margin-left:6px}
+
+.modal-box.wide{max-width:600px;max-height:88vh;display:flex;flex-direction:column}
+.modal-box .admin-res{margin:6px 0 0;font-size:13px}
+.ulist{overflow-y:auto;margin:0 -6px;padding:0 6px}
+.urow{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.urow:last-child{border-bottom:0}
+.urow-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.urow-info b{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.urow-info span{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.urow select{flex:none;background:var(--surface-2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:9px 10px;font:inherit;font-size:14px;cursor:pointer}
+.urow select:focus{outline:none;border-color:var(--accent)}
+.urow select:disabled{opacity:.6;cursor:default}
+
 .mias-sec{margin:52px 0 30px}
 .mias-sec h2{font-size:40px;text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:16px}
 .count{font-family:Inter,sans-serif;font-size:13px;font-weight:800;background:var(--accent);color:var(--ink);border-radius:999px;padding:3px 10px}
@@ -194,6 +235,7 @@ b{font-weight:700}
 @media (max-width:560px){
   .hola{display:none}
   .logo{font-size:24px}
+  .logo-img{height:34px}
   .mark{width:30px;height:30px;font-size:17px}
   .sec-head{padding-top:28px}
   .hero-foot .stat:nth-child(2){display:none}
@@ -207,7 +249,7 @@ b{font-weight:700}
 <!-- ================= LOGIN / REGISTRO ================= -->
 <section id="auth" class="auth">
   <div class="hero">
-    <div class="logo"><span class="mark"><span>CT</span></span>CROSS<b>TREINO</b></div>
+    <div class="logo"><img class="logo-img" src="data:image/png;base64,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" alt="Treino Club"></div>
     <h1 class="hero-title display">Tu cupo<br>te <b>espera.</b></h1>
     <div class="stripe" aria-hidden="true"><div class="marquee display"><span>ENTRENA · RESERVA · REPITE · ENTRENA · RESERVA · REPITE ·</span><span>ENTRENA · RESERVA · REPITE · ENTRENA · RESERVA · REPITE ·</span></div></div>
     <div class="hero-foot">
@@ -251,11 +293,14 @@ b{font-weight:700}
 <section id="app" class="hidden">
   <header class="topbar">
     <div class="wrap bar">
-      <div class="logo"><span class="mark"><span>CT</span></span>CROSS<b>TREINO</b></div>
+      <div class="logo"><img class="logo-img" src="data:image/png;base64,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" alt="Treino Club"></div>
       <div class="user">
         <span class="hola">Hola, <b id="hola-nombre"></b></span>
         <span id="rol-admin" class="chip mine hidden">Admin</span>
-        <span class="avatar" id="avatar">·</span>
+        <button class="avatar" id="avatar" type="button" data-perfil="abrir" title="Mi perfil" aria-label="Mi perfil">·</button>
+        <button class="icon-btn hidden" id="btn-usuarios" type="button" data-admin="abrir" title="Usuarios y roles" aria-label="Usuarios y roles">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </button>
         <button class="icon-btn" id="btn-salir" type="button" title="Cerrar sesión" aria-label="Cerrar sesión">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
         </button>
@@ -269,8 +314,10 @@ b{font-weight:700}
       <p class="muted">Máximo <b id="cupo-txt">20</b> atletas por clase</p>
     </div>
 
+    <div id="perfil-aviso"></div>
     <div class="days" id="dias"></div>
     <p class="fecha-larga" id="fecha-larga"></p>
+    <div id="wod"></div>
     <div class="grid" id="clases"></div>
 
     <section class="mias-sec">
@@ -289,6 +336,42 @@ b{font-weight:700}
       <button class="btn" id="modal-no" type="button">Volver</button>
       <button class="btn ghost-danger" id="modal-si" type="button">Sí, cancelar</button>
     </div>
+  </div>
+</div>
+
+<div id="perfil-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="perfil-titulo">
+  <form class="modal-box" id="form-perfil" novalidate>
+    <h3 class="display" id="perfil-titulo">Mi perfil</h3>
+    <p>Estos datos solo los ven el coach y el admin, para planificar mejor cada clase.</p>
+    <div class="field"><label>Género</label>
+      <div class="seg" role="radiogroup">
+        <label><input type="radio" name="genero" value="M"><span>M</span></label>
+        <label><input type="radio" name="genero" value="F"><span>F</span></label>
+        <label><input type="radio" name="genero" value="Otro"><span>Otro</span></label>
+      </div>
+    </div>
+    <div class="perfil-grid">
+      <div class="field"><label for="pf-estatura">Estatura <small>cm</small></label><input id="pf-estatura" type="number" inputmode="numeric" min="100" max="250" placeholder="170"></div>
+      <div class="field"><label for="pf-nacimiento">Nacimiento <small>año</small></label><input id="pf-nacimiento" type="number" inputmode="numeric" placeholder="1990"></div>
+      <div class="field"><label for="pf-peso">Peso <small>kg</small></label><input id="pf-peso" type="number" inputmode="decimal" min="30" max="250" step="0.1" placeholder="70"></div>
+    </div>
+    <p class="pf-nota">El peso se usa solo con fines estadísticos de salud y para ajustar las cargas de tu entrenamiento. 💚</p>
+    <p id="perfil-error" class="auth-error" role="alert"></p>
+    <div class="modal-actions">
+      <button class="btn" type="button" data-perfil="cerrar">Ahora no</button>
+      <button class="btn primary" type="submit">Guardar</button>
+    </div>
+  </form>
+</div>
+
+<div id="admin-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="admin-titulo">
+  <div class="modal-box wide">
+    <div class="wod-head">
+      <div><h3 class="display" id="admin-titulo">Usuarios</h3><p class="muted admin-res" id="admin-res"></p></div>
+      <button class="icon-btn" type="button" data-admin="cerrar" title="Cerrar" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="field" style="margin:4px 0 12px"><input id="admin-buscar" type="search" placeholder="Buscar por nombre o correo…" autocomplete="off"></div>
+    <div class="ulist" id="admin-lista"></div>
   </div>
 </div>
 
@@ -316,7 +399,7 @@ const ls = {
   del(k){ try { localStorage.removeItem(k); } catch(e){ delete mem[k]; } }
 };
 
-const state = { token: ls.get('ct_token'), agenda: null, diaSel: 0, inicial: true };
+const state = { token: ls.get('ct_token'), agenda: null, diaSel: 0, inicial: true, wodEdit: null };
 
 const DOW   = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 const DOW_L = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
@@ -371,7 +454,7 @@ function setTab(t){
 }
 
 /* ---------- Sesión ---------- */
-function salirLocal(){ state.token = null; state.agenda = null; state.inicial = true; ls.del('ct_token'); verAuth(); }
+function salirLocal(){ state.token = null; state.agenda = null; state.inicial = true; state.wodEdit = null; ls.del('ct_token'); verAuth(); }
 function manejarError(e){
   if (e.message === 'SESION'){ salirLocal(); toast('Tu sesión expiró. Vuelve a ingresar.', 'err'); return; }
   toast(e.message || 'Algo salió mal. Intenta de nuevo.', 'err');
@@ -431,14 +514,20 @@ async function cargar(){
 
 /* ---------- Render ---------- */
 function renderApp(){
-  const { usuario, dias, cupo, minCancelar } = state.agenda;
+  const { usuario, dias, cupo, minCancelar, minReservar = 180 } = state.agenda;
   $('#hola-nombre').textContent = usuario.nombre.split(' ')[0];
   $('#avatar').textContent = (usuario.nombre.trim()[0] || '·').toUpperCase();
-  $('#rol-admin').classList.toggle('hidden', usuario.rol !== 'admin');
+  const staff = usuario.rol === 'admin' || usuario.rol === 'coach';
+  $('#rol-admin').textContent = usuario.rol === 'coach' ? 'Coach' : 'Admin';
+  $('#rol-admin').classList.toggle('hidden', !staff);
+  $('#btn-usuarios').classList.toggle('hidden', usuario.rol !== 'admin');
   $('#cupo-txt').textContent = cupo;
+  $('#perfil-aviso').innerHTML = usuario.perfil ? '' : `<div class="aviso">
+    <span><b>Completa tu perfil</b> · género, estatura, año de nacimiento y peso, para que el coach planifique mejor.</span>
+    <button type="button" class="btn sm primary" data-perfil="abrir">Completar</button></div>`;
 
   if (!dias.length){
-    $('#dias').innerHTML = ''; $('#fecha-larga').textContent = '';
+    $('#dias').innerHTML = ''; $('#fecha-larga').textContent = ''; $('#wod').innerHTML = '';
     $('#clases').innerHTML = '<div class="vacio" style="grid-column:1/-1">No hay clases programadas en los próximos días.</div>';
     renderMias(); return;
   }
@@ -455,12 +544,163 @@ function renderApp(){
 
   const dia = dias[state.diaSel];
   $('#fecha-larga').textContent = fechaLarga(dia.fecha);
-  $('#clases').innerHTML = dia.clases.map(c => tarjeta(c, dia.fecha, cupo, minCancelar)).join('');
+  renderWod(dia, staff);
+  // Mantiene abiertas las listas de asistentes al refrescar (la agenda se recarga cada minuto)
+  state.asisAbiertos = new Set([...$$('#clases details[open]')].map(x => x.dataset.asis));
+  $('#clases').innerHTML = dia.soloWod
+    ? '<div class="vacio" style="grid-column:1/-1">Las reservas de este día aún no abren.<br>Como coach puedes dejar cargado el WOD desde ya.</div>'
+    : dia.clases.map(c => tarjeta(c, dia.fecha, cupo, minCancelar, minReservar)).join('');
   renderMias();
 }
 
-function tarjeta(c, fecha, cupo, minCancelar){
+/* ---------- Perfil ---------- */
+function durTxt(min){ return min % 60 ? `${min} min` : `${min / 60} h`; }
+
+function datosAtleta(a){
+  if (!a.genero) return 'sin perfil';
+  return [a.genero, a.edad && `${a.edad} años`, a.estatura && `${a.estatura} cm`, a.peso && `${a.peso} kg`].filter(Boolean).join(' · ');
+}
+
+function resumenAsistentes(lista){
+  const n = g => lista.filter(a => a.genero === g).length;
+  const con = lista.filter(a => a.genero);
+  const prom = k => { const v = con.map(a => a[k]).filter(Boolean); return v.length ? Math.round(v.reduce((s, x) => s + x, 0) / v.length) : null; };
+  const partes = [`${n('M')} M · ${n('F')} F` + (n('Otro') ? ` · ${n('Otro')} otro` : '')];
+  if (prom('edad')) partes.push(`edad prom. ${prom('edad')}`);
+  if (prom('peso')) partes.push(`peso prom. ${prom('peso')} kg`);
+  const sin = lista.length - con.length;
+  if (sin) partes.push(`${sin} sin perfil`);
+  return `<p class="asis-res">${partes.join(' · ')}</p>`;
+}
+
+function abrirPerfil(){
+  const p = (state.agenda && state.agenda.usuario.perfil) || {};
+  $$('#form-perfil input[name=genero]').forEach(r => r.checked = r.value === p.genero);
+  $('#pf-estatura').value = p.estatura || ''; $('#pf-nacimiento').value = p.nacimiento || ''; $('#pf-peso').value = p.peso || '';
+  $('#perfil-error').textContent = '';
+  $('#perfil-modal').classList.remove('hidden');
+}
+function cerrarPerfil(){ $('#perfil-modal').classList.add('hidden'); }
+
+$('#form-perfil').addEventListener('submit', async e => {
+  e.preventDefault();
+  const g = $('#form-perfil input[name=genero]:checked');
+  const datos = { genero: g ? g.value : '', estatura: $('#pf-estatura').value, nacimiento: $('#pf-nacimiento').value, peso: $('#pf-peso').value };
+  if (!datos.genero || !datos.estatura || !datos.nacimiento || !datos.peso){ $('#perfil-error').textContent = 'Completa los cuatro datos.'; return; }
+  const btn = e.target.querySelector('button[type=submit]');
+  btn.classList.add('loading'); btn.disabled = true; $('#perfil-error').textContent = '';
+  try {
+    state.agenda = await api('guardarPerfil', datos);
+    cerrarPerfil(); renderApp(); toast('Perfil guardado 💪');
+  } catch(err){
+    if (err.message === 'SESION'){ cerrarPerfil(); manejarError(err); }
+    else $('#perfil-error').textContent = err.message;
+  } finally { btn.classList.remove('loading'); btn.disabled = false; }
+});
+
+/* ---------- Panel de admin: usuarios y roles ---------- */
+const ROL_TXT = { usuario:'Atleta', coach:'Coach', admin:'Admin' };
+
+async function abrirAdmin(){
+  $('#admin-buscar').value = ''; $('#admin-res').textContent = '';
+  $('#admin-lista').innerHTML = '<div class="skel" style="height:180px"></div>';
+  $('#admin-modal').classList.remove('hidden');
+  try { state.usuarios = await api('usuarios'); renderUsuarios(); }
+  catch(e){ cerrarAdmin(); manejarError(e); }
+}
+function cerrarAdmin(){ $('#admin-modal').classList.add('hidden'); }
+
+function renderUsuarios(){
+  const lista = state.usuarios || [], yo = state.agenda.usuario.email.toLowerCase();
+  const n = r => lista.filter(u => u.rol === r).length;
+  const pl = (k, uno, varios) => `${k} ${k === 1 ? uno : varios}`;
+  $('#admin-res').textContent = [pl(lista.length, 'cuenta', 'cuentas'), pl(n('usuario'), 'atleta', 'atletas'),
+    pl(n('coach'), 'coach', 'coaches'), pl(n('admin'), 'admin', 'admins')].join(' · ');
+  const q = $('#admin-buscar').value.trim().toLowerCase();
+  const vis = q ? lista.filter(u => (u.nombre + ' ' + u.email).toLowerCase().includes(q)) : lista;
+  $('#admin-lista').innerHTML = vis.length ? vis.map(u => {
+    const soyYo = u.email.toLowerCase() === yo;
+    const opts = Object.keys(ROL_TXT).map(r => `<option value="${r}" ${u.rol === r ? 'selected' : ''}>${ROL_TXT[r]}</option>`).join('');
+    return `<div class="urow">
+      <div class="urow-info"><b>${esc(u.nombre)}${soyYo ? ' (tú)' : ''}</b><span>${esc(u.email)}</span><span>${u.perfil ? esc(datosAtleta(u.perfil)) : 'sin perfil'}</span></div>
+      <select data-rol-email="${esc(u.email)}" aria-label="Rol de ${esc(u.nombre)}" ${soyYo ? 'disabled title="No puedes cambiar tu propio rol"' : ''}>${opts}</select>
+    </div>`;
+  }).join('') : '<div class="vacio">Nadie coincide con la búsqueda.</div>';
+}
+
+$('#admin-buscar').addEventListener('input', renderUsuarios);
+
+document.addEventListener('change', async ev => {
+  const s = ev.target.closest('select[data-rol-email]');
+  if (!s) return;
+  const email = s.dataset.rolEmail, rol = s.value;
+  const u = state.usuarios.find(x => x.email === email);
+  s.disabled = true;
+  try {
+    state.usuarios = await api('cambiarRol', { email, rol });
+    renderUsuarios();
+    toast(`${u.nombre.split(' ')[0]} ahora es ${ROL_TXT[rol]}.`);
+    cargar(); // refresca la agenda (p.ej. asistentes visibles)
+  } catch(e){
+    s.value = u.rol; s.disabled = false;
+    if (e.message === 'SESION') cerrarAdmin();
+    manejarError(e);
+  }
+});
+
+/* ---------- WOD ---------- */
+function etiquetaDia(f){ return f === hoyISO() ? 'Hoy' : f === mananaISO() ? 'Mañana' : fechaLarga(f); }
+
+function renderWod(dia, staff){
+  if (state.wodEdit) return; // no pisar lo que el coach está escribiendo (la agenda se refresca cada minuto)
+  const w = dia.wod;
+  if (!w && !staff && dia.clases.every(c => c.estado === 'cerrada')){ $('#wod').innerHTML = ''; return; }
+  $('#wod').innerHTML = `<div class="wod-card">
+    <div class="wod-head">
+      <div><p class="eyebrow">WOD · ${etiquetaDia(dia.fecha)}</p><h2 class="display">Workout del día</h2></div>
+      ${staff ? `<button type="button" class="btn sm" data-wod="editar">${w ? 'Editar' : 'Escribir WOD'}</button>` : ''}
+    </div>
+    ${w
+      ? `<div class="wod-txt">${esc(w.texto)}</div><p class="wod-autor">Publicado por ${esc(w.autor)}</p>`
+      : `<p class="muted">${staff ? 'Aún no hay WOD para este día.' : 'El coach aún no publica el WOD de este día. ¡Vuelve más tarde! 💪'}</p>`}
+  </div>`;
+}
+
+function editarWod(){
+  const dia = state.agenda.dias[state.diaSel];
+  state.wodEdit = dia.fecha;
+  $('#wod').innerHTML = `<div class="wod-card">
+    <div class="wod-head"><div><p class="eyebrow">WOD · ${etiquetaDia(dia.fecha)}</p><h2 class="display">Editar WOD</h2></div></div>
+    <textarea id="wod-input" class="wod-input" maxlength="5000" placeholder="WARM UP&#10;3 rondas: 10 air squats, 10 push ups…&#10;&#10;WOD&#10;AMRAP 12': …">${esc(dia.wod ? dia.wod.texto : '')}</textarea>
+    <p class="note" style="text-align:left;margin:0">Si lo dejas vacío y guardas, se borra el WOD de este día.</p>
+    <div class="wod-actions">
+      <button type="button" class="btn" data-wod="cancelar">Cancelar</button>
+      <button type="button" class="btn primary" data-wod="guardar">Guardar WOD</button>
+    </div>
+  </div>`;
+  $('#wod-input').focus();
+}
+
+async function accionWod(b){
+  const act = b.dataset.wod;
+  if (act === 'editar') return editarWod();
+  if (act === 'cancelar'){ state.wodEdit = null; return renderApp(); }
+  const texto = $('#wod-input').value;
+  b.classList.add('loading'); b.disabled = true;
+  try {
+    state.agenda = await api('guardarWod', { fecha: state.wodEdit, texto });
+    state.wodEdit = null; renderApp();
+    toast(texto.trim() ? 'WOD publicado 💪' : 'WOD borrado.', texto.trim() ? 'ok' : 'info');
+  } catch(e){
+    b.classList.remove('loading'); b.disabled = false;
+    if (e.message === 'SESION') state.wodEdit = null;
+    manejarError(e);
+  }
+}
+
+function tarjeta(c, fecha, cupo, minCancelar, minReservar){
   const h = hora12(c.hora);
+  const limite = durTxt(minReservar);
   const libres = Math.max(0, cupo - c.ocupados);
   const pct = c.ocupados / cupo;
   const data = `data-fecha="${fecha}" data-hora="${c.hora}"`;
@@ -468,6 +708,7 @@ function tarjeta(c, fecha, cupo, minCancelar){
 
   if (c.mia)                    { chip = ['mine','Tu reserva']; cls = 'mia'; }
   else if (c.estado === 'cerrada'){ chip = ['closed','Cerrada'];  cls = 'cerrada'; }
+  else if (c.estado === 'limite') { chip = ['closed','Reservas cerradas']; cls = 'cerrada'; }
   else if (c.estado === 'llena')  { chip = ['full','Lleno']; }
   else if (libres <= 5)           { chip = ['warn','Últimos cupos']; }
   else                            { chip = ['ok','Disponible']; }
@@ -475,9 +716,11 @@ function tarjeta(c, fecha, cupo, minCancelar){
   if (c.mia){
     if (c.puedeCancelar) btn = `<button type="button" class="btn ghost-danger" data-act="cancelar" ${data}>Cancelar reserva</button>`;
     else { btn = `<button type="button" class="btn done" disabled>✓ Reservado</button>`;
-           if (c.estado !== 'cerrada') nota = `<p class="note">Se puede cancelar hasta ${minCancelar} min antes</p>`; }
+           if (c.estado !== 'cerrada') nota = `<p class="note">Se puede cancelar hasta ${durTxt(minCancelar)} antes</p>`; }
   }
   else if (c.estado === 'cerrada') btn = `<button type="button" class="btn" disabled>Clase cerrada</button>`;
+  else if (c.estado === 'limite') { btn = `<button type="button" class="btn" disabled>Reservas cerradas</button>`;
+                                    nota = `<p class="note">Las reservas se cierran ${limite} antes de la clase</p>`; }
   else if (c.estado === 'llena')   btn = `<button type="button" class="btn" disabled>Sin cupos</button>`;
   else if (c.bloqueada)            btn = `<button type="button" class="btn" disabled>Ya tienes clase este día</button>`;
   else                             btn = `<button type="button" class="btn primary" data-act="reservar" ${data}>Reservar cupo</button>`;
@@ -485,8 +728,8 @@ function tarjeta(c, fecha, cupo, minCancelar){
   const segs = Array.from({ length: cupo }, (_, i) => `<i class="${i < c.ocupados ? 'on' : ''}"></i>`).join('');
   const nivel = pct >= 1 ? 'lvl-full' : pct >= .75 ? 'lvl-warn' : '';
   const asis = c.asistentes
-    ? `<details class="asis"><summary>Asistentes (${c.asistentes.length})</summary>${
-        c.asistentes.length ? `<ol>${c.asistentes.map(n => `<li>${esc(n)}</li>`).join('')}</ol>` : '<p>Nadie aún.</p>'
+    ? `<details class="asis" data-asis="${fecha + c.hora}" ${state.asisAbiertos && state.asisAbiertos.has(fecha + c.hora) ? 'open' : ''}><summary>Asistentes (${c.asistentes.length})</summary>${
+        c.asistentes.length ? `<ol class="det">${c.asistentes.map(a => `<li>${esc(a.nombre)}<small>${esc(datosAtleta(a))}</small></li>`).join('')}</ol>${resumenAsistentes(c.asistentes)}` : '<p>Nadie aún.</p>'
       }</details>` : '';
 
   return `<article class="card ${cls}">
@@ -495,7 +738,7 @@ function tarjeta(c, fecha, cupo, minCancelar){
       <span class="chip ${chip[0]}">${chip[1]}</span>
     </div>
     <div>
-      <div class="cap"><span><b>${c.ocupados}</b> / ${cupo} atletas</span><span>${c.estado === 'cerrada' ? '' : libres ? `Quedan <b>${libres}</b>` : 'Completo'}</span></div>
+      <div class="cap"><span><b>${c.ocupados}</b> / ${cupo} atletas</span><span>${c.estado === 'cerrada' || c.estado === 'limite' ? '' : libres ? `Quedan <b>${libres}</b>` : 'Completo'}</span></div>
       <div class="segs ${nivel}" style="grid-template-columns:repeat(${cupo},1fr);margin-top:10px">${segs}</div>
     </div>
     ${btn}${nota}${asis}
@@ -520,8 +763,20 @@ function renderMias(){
 
 /* ---------- Clicks (días, reservar, cancelar) ---------- */
 document.addEventListener('click', async ev => {
+  const w = ev.target.closest('[data-wod]');
+  if (w){ if (!w.disabled) accionWod(w); return; }
+
+  const ad = ev.target.closest('[data-admin]');
+  if (ad){ ad.dataset.admin === 'abrir' ? abrirAdmin() : cerrarAdmin(); return; }
+
+  const p = ev.target.closest('[data-perfil]');
+  if (p){ p.dataset.perfil === 'abrir' ? abrirPerfil() : cerrarPerfil(); return; }
+
   const d = ev.target.closest('[data-dia]');
-  if (d){ state.diaSel = Number(d.dataset.dia); renderApp(); return; }
+  if (d){
+    if (state.wodEdit){ toast('Guarda o cancela el WOD antes de cambiar de día.', 'err'); return; }
+    state.diaSel = Number(d.dataset.dia); renderApp(); return;
+  }
 
   const b = ev.target.closest('[data-act]');
   if (!b || b.disabled) return;
@@ -550,8 +805,9 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && st
 /* =========================================================
    MODO DEMO (solo cuando API_URL está vacío) — simula el backend
    ========================================================= */
-const D = { horas:['18:00','19:00','20:00'], cupo:20, adelante:7, activos:[1,2,3,4,5,6], unaPorDia:true, minCancelar:60 };
-const demoDB = { usuarios:[{ email:'demo@crosstreino.com', nombre:'Atleta Demo', password:'123456', rol:'admin' }], sesiones:{}, reservas:[], sembrado:false };
+const D = { horas:['18:00','19:00','20:00'], cupo:20, adelante:7, activos:[1,2,3,4,5,6], unaPorDia:true, minCancelar:120, minReservar:120 };
+const demoDB = { usuarios:[{ email:'demo@crosstreino.com', nombre:'Atleta Demo', password:'123456', rol:'admin' }], sesiones:{}, reservas:[], sembrado:false,
+  wods:{ [iso(new Date())]: { texto:'WARM UP\n3 rondas: 10 air squats, 10 push ups, 200 m run\n\nWOD · AMRAP 15\'\n12 wall balls (9/6 kg)\n9 kettlebell swings (24/16 kg)\n6 burpees over the bar', autor:'Coach Demo' } } };
 const NOMBRES = ['Andrea Vélez','Carlos Ortiz','Mateo Crespo','Valentina Ochoa','Diego Malo','Sofía Cordero','Daniel Vázquez','Camila Astudillo','José Andrade','Gabriela Muñoz','Luis Peña','Paula Moscoso','Andrés Torres','María Sarmiento','Pablo Jaramillo','Fernanda León','Jorge Calle','Isabel Neira','Santiago Vintimilla','Lucía Serrano'];
 
 function demoFechas(){
@@ -575,21 +831,27 @@ async function demoApi(b){
   await new Promise(r => setTimeout(r, 380));
   demoSembrar();
   const err = m => { throw new Error(m); };
-  const pub = u => ({ email:u.email, nombre:u.nombre, rol:u.rol });
+  const pub = u => ({ email:u.email, nombre:u.nombre, rol:u.rol, perfil:u.perfil || null });
   const nueva = u => { const t = 'demo-' + Math.random().toString(36).slice(2); demoDB.sesiones[t] = u.email; return { token:t, usuario:pub(u) }; };
   const sesion = () => { const e = demoDB.sesiones[b.token]; const u = e && demoDB.usuarios.find(x => x.email === e); if (!u) err('SESION'); return u; };
   const inicio = (f, h) => { const o = fechaObj(f); o.setHours(+h.slice(0,2), +h.slice(3)); return o.getTime(); };
   const agenda = () => {
     const u = sesion(), now = Date.now();
-    return { usuario:pub(u), cupo:D.cupo, minCancelar:D.minCancelar, dias: demoFechas().map(f => {
+    return { usuario:pub(u), cupo:D.cupo, minCancelar:D.minCancelar, minReservar:D.minReservar, dias: demoFechas().map(f => {
       const del = demoDB.reservas.filter(r => r.fecha === f), tengo = del.some(r => r.email === u.email);
-      return { fecha:f, clases: D.horas.map(h => {
+      return { fecha:f, wod: demoDB.wods[f] || null, clases: D.horas.map(h => {
         const l = del.filter(r => r.hora === h), mia = l.some(r => r.email === u.email), ini = inicio(f, h);
         const c = { hora:h, ocupados:l.length, mia,
-          estado: ini <= now ? 'cerrada' : l.length >= D.cupo ? 'llena' : 'abierta',
+          estado: ini <= now ? 'cerrada' : ini - now < D.minReservar * 6e4 ? 'limite' : l.length >= D.cupo ? 'llena' : 'abierta',
           bloqueada: !mia && D.unaPorDia && tengo,
           puedeCancelar: mia && ini - now >= D.minCancelar * 6e4 };
-        if (u.rol === 'admin') c.asistentes = l.map(r => r.nombre);
+        if (u.rol === 'admin' || u.rol === 'coach') c.asistentes = l.map((r, k) => {
+          const x = demoDB.usuarios.find(z => z.email === r.email);
+          if (x) return { nombre:r.nombre, ...(x.perfil || {}) };
+          if (k % 7 === 6) return { nombre:r.nombre }; // algunos sin perfil
+          const f = k % 2 === 0;
+          return { nombre:r.nombre, genero: f ? 'F' : 'M', edad: 22 + (k * 7) % 25, estatura: (f ? 158 : 170) + (k * 3) % 15, peso: (f ? 56 : 72) + (k * 5) % 18 };
+        });
         return c;
       })};
     })};
@@ -610,10 +872,45 @@ async function demoApi(b){
       demoDB.usuarios.push(u); return nueva(u);
     }
     case 'logout': delete demoDB.sesiones[b.token]; return true;
+    case 'usuarios': {
+      if (sesion().rol !== 'admin') err('Solo el admin puede ver los usuarios.');
+      if (demoDB.usuarios.length === 1) NOMBRES.slice(0, 8).forEach((n, k) => demoDB.usuarios.push({
+        email: n.split(' ')[0].toLowerCase() + '@correo.com', nombre:n, password:'x', rol: k === 0 ? 'coach' : 'usuario',
+        perfil: k % 3 === 2 ? null : { genero: k % 2 ? 'M' : 'F', estatura: 160 + k * 3, nacimiento: 1985 + k * 2, edad: new Date().getFullYear() - 1985 - k * 2, peso: 58 + k * 3 } }));
+      return demoDB.usuarios.map(u => ({ email:u.email, nombre:u.nombre, rol:u.rol, perfil:u.perfil || null }))
+        .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+    }
+    case 'cambiarRol': {
+      const yo = sesion();
+      if (yo.rol !== 'admin') err('Solo el admin puede cambiar roles.');
+      if (b.email === yo.email) err('No puedes cambiar tu propio rol.');
+      const x = demoDB.usuarios.find(u => u.email === b.email);
+      if (!x) err('No encontramos ese usuario.');
+      x.rol = b.rol;
+      return demoApi({ ...b, accion:'usuarios' });
+    }
+    case 'guardarPerfil': {
+      const u = sesion();
+      if (!['M','F','Otro'].includes(b.genero)) err('Elige tu género.');
+      const est = +b.estatura, nac = Math.round(+b.nacimiento), pe = +String(b.peso).replace(',', '.'), anio = new Date().getFullYear();
+      if (!(est >= 100 && est <= 250)) err('La estatura debe estar entre 100 y 250 cm.');
+      if (!(nac >= anio - 100 && nac <= anio - 10)) err(`El año de nacimiento debe estar entre ${anio - 100} y ${anio - 10}.`);
+      if (!(pe >= 30 && pe <= 250)) err('El peso debe estar entre 30 y 250 kg.');
+      u.perfil = { genero:b.genero, estatura:est, nacimiento:nac, edad:anio - nac, peso:Math.round(pe * 10) / 10 };
+      return agenda();
+    }
+    case 'guardarWod': {
+      const u = sesion();
+      if (u.rol !== 'admin' && u.rol !== 'coach') err('Solo el coach puede editar el WOD.');
+      const t = String(b.texto || '').trim();
+      if (t) demoDB.wods[b.fecha] = { texto:t, autor:u.nombre }; else delete demoDB.wods[b.fecha];
+      return agenda();
+    }
     case 'agenda': return agenda();
     case 'reservar': {
       const u = sesion(), del = demoDB.reservas.filter(r => r.fecha === b.fecha);
       if (inicio(b.fecha, b.hora) <= Date.now()) err('Esa clase ya empezó.');
+      if (inicio(b.fecha, b.hora) - Date.now() < D.minReservar * 6e4) err(`Las reservas se cierran ${durTxt(D.minReservar)} antes de la clase.`);
       if (D.unaPorDia && del.some(r => r.email === u.email)) err('Solo puedes reservar una clase por día.');
       if (del.filter(r => r.hora === b.hora).length >= D.cupo) err('¡Uy! Esa clase se acaba de llenar.');
       demoDB.reservas.push({ fecha:b.fecha, hora:b.hora, email:u.email, nombre:u.nombre });
@@ -623,7 +920,7 @@ async function demoApi(b){
       const u = sesion();
       const i = demoDB.reservas.findIndex(r => r.fecha === b.fecha && r.hora === b.hora && r.email === u.email);
       if (i < 0) err('No encontramos esa reserva.');
-      if (inicio(b.fecha, b.hora) - Date.now() < D.minCancelar * 6e4) err(`Solo puedes cancelar hasta ${D.minCancelar} minutos antes.`);
+      if (inicio(b.fecha, b.hora) - Date.now() < D.minCancelar * 6e4) err(`Solo puedes cancelar hasta ${durTxt(D.minCancelar)} antes de la clase.`);
       demoDB.reservas.splice(i, 1); return agenda();
     }
   }
